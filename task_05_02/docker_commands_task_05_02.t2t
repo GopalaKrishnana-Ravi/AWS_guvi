@@ -1,0 +1,208 @@
+Docker Installation:-
+
+
+   13  sudo apt update
+   14  docker ps
+   15  sudo snap install docker         # version 24.0.5, or
+   16  sudo apt  install podman-docker  # version 3.4.4+ds1-1ubuntu1.22.04.2
+   17  sudo apt  install docker.io      # version 24.0.5-0ubuntu1~22.04.1
+   18  docker --version
+   19  docker images
+   20  sudo usermod -aG docker ubuntu
+   21  docker images
+   22  groups ubuntu
+   23  sudo groups ubuntu
+   24  sudo systemctl restart docker
+   25  sudo systemctl docker
+   26  sudo systemctl show
+   27  sudo systemctl show | grep -i docker
+   28  sudo systemctl status docker
+   29  docker images
+   30  cat /var/run/docker.sock
+   31  sudo chmod 665 /var/run/docker.sock
+   32  cat /var/run/docker.sock
+   33  docker images
+   
+ 
+Docker Basics commands:-
+
+
+ubuntu@ip-172-31-45-6:~/docker$ docker version
+Client:
+ Version:           24.0.5
+ API version:       1.43
+ Go version:        go1.20.3
+ Git commit:        24.0.5-0ubuntu1~22.04.1
+ Built:             Mon Aug 21 19:50:14 2023
+ OS/Arch:           linux/amd64
+ Context:           default
+
+Server:
+ Engine:
+  Version:          24.0.5
+  API version:      1.43 (minimum version 1.12)
+  Go version:       go1.20.8
+  Git commit:       a61e2b4
+  Built:            Sat Oct  7 00:14:30 2023
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          v1.6.21
+  GitCommit:        3dce8eb055cbb6872793272b4f20ed16117344f8
+ runc:
+  Version:          1.1.7
+  GitCommit:        
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+  
+ ============================================================================================
+  
+ubuntu@ip-172-31-45-6:~/docker$ git clone https://github.com/yasminjeelani/springboot_docker
+Cloning into 'springboot_docker'...
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (4/4), done.
+remote: Total 5 (delta 0), reused 5 (delta 0), pack-reused 0
+Receiving objects: 100% (5/5), 15.04 MiB | 11.05 MiB/s, done.
+
+
+
+ubuntu@ip-172-31-45-6:~/docker$ ls -ltr
+total 4
+drwxrwxr-x 4 ubuntu ubuntu 4096 Feb  7 04:08 springboot_docker
+ubuntu@ip-172-31-45-6:~/docker$ cd springboot_docker/
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker$ ls -ltr
+total 4
+drwxrwxr-x 2 ubuntu ubuntu 4096 Feb  7 04:08 SpringBootHelloWorld
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker$ cd 
+.git/                 SpringBootHelloWorld/ 
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker$ cd SpringBootHelloWorld/
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ ls -ltr
+total 17144
+-rw-rw-r-- 1 ubuntu ubuntu      106 Feb  7 04:08 Dockerfile
+-rw-rw-r-- 1 ubuntu ubuntu 17550341 Feb  7 04:08 DockerSpringBootHello-0.0.1-SNAPSHOT.jar
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ cat Dockerfile 
+FROM openjdk:11.0.12-jdk-slim
+ADD *.jar app1.jar
+ENTRYPOINT ["sh","-c","java -jar /app1.jar"]
+EXPOSE 8080
+
+ ============================================================================================
+
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker build -t myspringboot .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  17.55MB
+Step 1/4 : FROM openjdk:11.0.12-jdk-slim
+11.0.12-jdk-slim: Pulling from library/openjdk
+7d63c13d9b9b: Pull complete 
+225be9814eda: Pull complete 
+c78f8a9ed884: Pull complete 
+c95f3ad59dd5: Pull complete 
+Digest: sha256:e7cb0867beb749222b109e45c2769f589e6dc06edf0c78a47aa0a2375c85b8f4
+Status: Downloaded newer image for openjdk:11.0.12-jdk-slim
+ ---> 3593102dcdb4
+Step 2/4 : ADD *.jar app1.jar
+ ---> 295f1dced987
+Step 3/4 : ENTRYPOINT ["sh","-c","java -jar /app1.jar"]
+ ---> Running in 1aaf698eea6a
+Removing intermediate container 1aaf698eea6a
+ ---> 912f1be5c658
+Step 4/4 : EXPOSE 8080
+ ---> Running in 023220dc2368
+Removing intermediate container 023220dc2368
+ ---> 1666cf9eb281
+Successfully built 1666cf9eb281
+Successfully tagged myspringboot:latest
+
+ ============================================================================================
+
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ ls -ltr
+total 17144
+-rw-rw-r-- 1 ubuntu ubuntu      106 Feb  7 04:08 Dockerfile
+-rw-rw-r-- 1 ubuntu ubuntu 17550341 Feb  7 04:08 DockerSpringBootHello-0.0.1-SNAPSHOT.jar
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker run -d myspringboot
+c60452c026c7449b5e4d2043f934010f9c2753105e9542983a69c24091303f0f
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS         PORTS      NAMES
+c60452c026c7   myspringboot   "sh -c 'java -jar /a…"   11 seconds ago   Up 6 seconds   8080/tcp   inspiring_panini
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS      NAMES
+c60452c026c7   myspringboot   "sh -c 'java -jar /a…"   39 seconds ago   Up 34 seconds   8080/tcp   inspiring_panini
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ cat Dockerfile 
+FROM openjdk:11.0.12-jdk-slim
+ADD *.jar app1.jar
+ENTRYPOINT ["sh","-c","java -jar /app1.jar"]
+EXPOSE 8080
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker stop inspiring_panini
+inspiring_panini
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+ubuntu@ip-172-31-45-6:~/docker/springboot_docker/SpringBootHelloWorld$ docker run -p 8080:8080 myspringboot
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.6.8)
+ 
+ 
+  ============================================================================================
+
+ ubuntu@ip-172-31-45-6:~$ docker ps
+CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+49914b1947c4   myspringboot   "sh -c 'java -jar /a…"   4 minutes ago   Up 3 minutes   0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   boring_matsumoto
+
+
+ubuntu@ip-172-31-45-6:~$ docket stop 499
+Command 'docket' not found, did you mean:
+  command 'docker' from snap docker (24.0.5)
+  command 'socket' from deb socket (1.1-10build1)
+  command 'docker' from deb podman-docker (3.4.4+ds1-1ubuntu1.22.04.2)
+  command 'docker' from deb docker.io (24.0.5-0ubuntu1~22.04.1)
+See 'snap info <snapname>' for additional versions.
+
+
+ubuntu@ip-172-31-45-6:~$ docker stop 499
+499
+ubuntu@ip-172-31-45-6:~$ docker ps -a
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS                        PORTS     NAMES
+49914b1947c4   myspringboot   "sh -c 'java -jar /a…"   5 minutes ago    Exited (137) 10 seconds ago             boring_matsumoto
+c60452c026c7   myspringboot   "sh -c 'java -jar /a…"   10 minutes ago   Exited (137) 8 minutes ago              inspiring_panini
+ubuntu@ip-172-31-45-6:~$ docker rm 499 c604
+499
+c604
+ubuntu@ip-172-31-45-6:~$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+ubuntu@ip-172-31-45-6:~$ docker images
+REPOSITORY     TAG                IMAGE ID       CREATED          SIZE
+myspringboot   latest             1666cf9eb281   12 minutes ago   447MB
+openjdk        11.0.12-jdk-slim   3593102dcdb4   2 years ago      429MB
+ubuntu@ip-172-31-45-6:~$ docker rmi 166 359
+Untagged: myspringboot:latest
+Deleted: sha256:1666cf9eb28156cbc8d3c2ac13f8994558c3cfaf4c8a2fdfaf3fe21d6bfd9042
+Deleted: sha256:912f1be5c658a1a2d396bd24a2a2d0a8ae3cf2a8edb21ffed880580c0dfb2fc8
+Deleted: sha256:295f1dced9870c60fef9cc127e3c06e3c85358c9cb13d03f5dd9032ca6b2e3a9
+Deleted: sha256:5b8cb3c8d3d61216b4295167a19e4c353387d21450dd58ebf0c784d625365252
+Untagged: openjdk:11.0.12-jdk-slim
+Untagged: openjdk@sha256:e7cb0867beb749222b109e45c2769f589e6dc06edf0c78a47aa0a2375c85b8f4
+Deleted: sha256:3593102dcdb484d8eddbfbf64f4c172e2453617a02d8fa715ba637840a3e3ca7
+Deleted: sha256:ff813d9de508ba89774b27aa2f97796247aa9f0eb7f989c91615f7f65495456e
+Deleted: sha256:bbe79b29f3974a07bb711976b891167c9384f279b3a32d2dff99fd7a9ed72171
+Deleted: sha256:1e3f23768b54a38d5dc3d897c4103b7f8584fe3ec69fe58ea981a769e4b13498
+Deleted: sha256:e8b689711f21f9301c40bf2131ce1a1905c3aa09def1de5ec43cf0adf652576e
+
+  ============================================================================================
+
+docker pull <image-name>
+docker exec -it <image-name> <command>
+docker voulme create myvoulme
+docker run --name mynewwebservices -d -p 8080:8080 -v myvoulme:/var/lib/docker/volumes/ <image-name>
+
