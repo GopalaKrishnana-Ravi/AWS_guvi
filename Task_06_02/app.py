@@ -1,0 +1,19 @@
+import os
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/")
+def main():
+    return """Welcome!<br>
+               Name: Gopala Krishnan R<br>
+               Occupation: Database Admin<br>
+               Company: TCS<br>
+               Mail: Krishravi2209@gmail.com"""
+
+@app.route('/how are you')
+def hello():
+    return 'I am good, how about you?'
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
